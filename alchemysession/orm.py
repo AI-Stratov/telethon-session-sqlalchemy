@@ -57,11 +57,15 @@ class AlchemySession(MemorySession):
 
     def set_update_state(self, entity_id: int, row: Any) -> None:
         if row:
-            self.db.merge(self.UpdateState(session_id=self.session_id, entity_id=entity_id,
-                                           pts=row.pts, qts=row.qts, date=row.date.timestamp(),
-                                           seq=row.seq,
-                                           unread_count=row.unread_count))
-            self.save()
+            try:
+                self.db.merge(self.UpdateState(session_id=self.session_id, entity_id=entity_id,
+                                               pts=row.pts, qts=row.qts, date=row.date.timestamp(),
+                                               seq=row.seq,
+                                               unread_count=row.unread_count))
+                self.save()
+            except:
+                self.db.rollback()
+                raise
 
     @MemorySession.auth_key.setter
     def auth_key(self, value: AuthKey) -> None:
@@ -102,9 +106,13 @@ class AlchemySession(MemorySession):
         if not rows:
             return
 
-        for row in rows:
-            self.db.merge(row)
-        self.save()
+        try:
+            for row in rows:
+                self.db.merge(row)
+            self.save()
+        except:
+            self.db.rollback()
+            raise
 
     def get_entity_rows_by_phone(self, key: str) -> Optional[Tuple[int, int]]:
         row = self._db_query(self.Entity,
