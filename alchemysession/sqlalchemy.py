@@ -1,16 +1,14 @@
 from typing import Optional, Tuple, Any, Union
 
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm.scoping import scoped_session
+import sqlalchemy as sql
 from sqlalchemy import Column, String, Integer, BigInteger, LargeBinary, orm, func, select, and_, \
     inspect
-import sqlalchemy as sql
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm.scoping import scoped_session
 
-from .orm import AlchemySession
 from .core import AlchemyCoreSession
-from .core_mysql import AlchemyMySQLCoreSession
-from .core_sqlite import AlchemySQLiteCoreSession
 from .core_postgres import AlchemyPostgresCoreSession
+from .orm import AlchemySession
 
 LATEST_VERSION = 2
 
@@ -59,12 +57,8 @@ class AlchemySessionContainer:
     @core_mode.setter
     def core_mode(self, val: bool) -> None:
         if val:
-            if self.db_engine.dialect.name == "mysql":
-                self.alchemy_session_class = AlchemyMySQLCoreSession
-            elif self.db_engine.dialect.name == "postgresql":
+            if self.db_engine.dialect.name == "postgresql":
                 self.alchemy_session_class = AlchemyPostgresCoreSession
-            elif self.db_engine.dialect.name == "sqlite":
-                self.alchemy_session_class = AlchemySQLiteCoreSession
             else:
                 self.alchemy_session_class = AlchemyCoreSession
         else:

@@ -1,11 +1,10 @@
-from typing import Optional, Tuple, Any, Union, TYPE_CHECKING
 import datetime
+from typing import Optional, Tuple, Any, Union, TYPE_CHECKING
 
 from sqlalchemy import orm
-
-from telethon.sessions.memory import MemorySession, _SentFileType
 from telethon import utils
 from telethon.crypto import AuthKey
+from telethon.sessions.memory import MemorySession, _SentFileType
 from telethon.tl.types import InputPhoto, InputDocument, PeerUser, PeerChat, PeerChannel, updates
 
 if TYPE_CHECKING:

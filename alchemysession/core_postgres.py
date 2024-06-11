@@ -1,7 +1,6 @@
 from typing import Any, Union
 
 from sqlalchemy.dialects.postgresql import insert
-
 from telethon.sessions.memory import _SentFileType
 from telethon.tl.types import InputPhoto, InputDocument
 

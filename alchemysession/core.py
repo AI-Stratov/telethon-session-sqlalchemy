@@ -1,11 +1,10 @@
-from typing import Optional, Tuple, Any, Union
 import datetime
+from typing import Optional, Tuple, Any, Union
 
 from sqlalchemy import and_, select
-
-from telethon.sessions.memory import _SentFileType
 from telethon import utils
 from telethon.crypto import AuthKey
+from telethon.sessions.memory import _SentFileType
 from telethon.tl.types import InputPhoto, InputDocument, PeerUser, PeerChat, PeerChannel, updates
 
 from .orm import AlchemySession
@@ -123,7 +122,7 @@ class AlchemyCoreSession(AlchemySession):
                 utils.get_peer_id(PeerChannel(key))
             )
             rows = self.engine.execute(select([t.c.id, t.c.hash])
-                .where(
+            .where(
                 and_(t.c.session_id == self.session_id, t.c.id.in_(ids))))
 
         try:
